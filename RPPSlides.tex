@@ -94,6 +94,9 @@
 				\item Larger ships have independent weapon hardpoints
 				\item Relatively low variety of ship models in current game
 			\end{itemize}
+			\begin{center}
+				\includegraphics[width=0.5\linewidth]{mesh.jpg}
+			\end{center}
 		
 		\end{frame}
 
@@ -114,13 +117,14 @@
 			\item Research and build a procedural destruction system
 			\item Generate custom damaged and destroyed appearances
 				\begin{itemize}
-					\item Structure-dependent deformation
-					\item Realistic response to damage type
+					\item Structure-dependent deformation or separation
+					\item Realistic response to damage type --- laser, missile, etc.
 				\end{itemize}
 			\item Real-time performance necessary
 		\end{itemize}
 		\end{frame}
 
+	\subsection{Samples}
 		\begin{frame}{Context --- Sample Capital Ships}
 			\begin{textblock*}{2cm}[0,1](.5cm,8.9cm) % {block width} (coords)
 			\includegraphics[width=2cm]{bornready.jpg}
@@ -148,39 +152,103 @@
 
 
 \section{Existing Approaches}
-	\begin{frame}{Existing Approaches}
-
-	
+	\begin{frame}[c]
+	\begin{centering}
+	\begin{beamercolorbox}[sep=12pt,center]{part title}
+	\usebeamerfont{section title}\LARGE\insertsection\par
+	\end{beamercolorbox}
+	\end{centering}
 	\end{frame}
+
 	\subsection{Art Swap}
 		\begin{frame}{Art Swap}
+		One simple possible approach is to replace the rendered asset with pre-prepared progressively more damaged versions
+		\vskip .5em
 		\begin{itemize}
 			\item Current implementation --- in-engine support
 			\item Popular solution, used by many other games
-			\item Low runtime cost --- damage thresholding
+			\item Low runtime cost --- damage threshold checks
 		\end{itemize}
+		\vskip .5em
 		\emph{However:}
+		\vskip .5em
 		\begin{itemize}
-			\item High production cost - multiple asset versions
+			\item High production costs due to multiple asset versions
 			\item Visually identical for every instance
+			\item Fidelity scales with artist investment
 		\end{itemize}
 		
 		\end{frame}
 	\subsection{Material-based destruction}
 		\begin{frame}{Material-based destruction}
+		Another option is to define the collapse behaviour of individual materials --- similar to familiar systems that define the render behaviour
+		\vskip .5em
+		\begin{itemize}
+			\item Increasingly popular approach for varied destruction
+			\item Small number of middleware solutions
+			\begin{itemize}
+				\item \textbf{Havok}: pattern-based solid mesh subdivision
+				\item \textbf{PhysX}: experimental GPU-based rigid body destruction
+				\item Various other engine-specific custom solutions
+			\end{itemize}
+		\end{itemize}
+		\vskip .5em
+		\emph{However:}
+		\vskip .5em
+		\begin{itemize}
+			\item High computational load --- any quad might fracture
+			\item Only works for single-material (homogeneous) items
+			\item Does not account for structural information
+		\end{itemize}
 		\end{frame}
 	% \subsubsection{Havok Destruction}
 	% \subsubsection{Euphoria}
 	\subsection{Structure-aware solvers}
 		\begin{frame}{Structure-aware solvers}
+		Not currently used in industry --- builds on work using constraints-based solvers for procedural level generation, \\and academic physics-based destruction research
+		\vskip .5em
+		\begin{itemize}
+			\item Possible destruction states are enumerable
+			\item Structure and material behaviour are constraints
+			\item Actual damage experienced is also a constraint
+			\item Suitable damage effect can be generated and rendered
+		\end{itemize}
+		\vskip .5em
+		\emph{However:}
+		\vskip .5em
+		\begin{itemize}
+			\item Potential high processing load --- pre-selection needed
+			\item Structure information must be provided
+		\end{itemize}
 		\end{frame}
 
 
 \section{Proposed Approach}
-	\begin{frame}{Proposed Approach}
+	\begin{frame}[c]
+	\begin{centering}
+	\begin{beamercolorbox}[sep=12pt,center]{part title}
+	\usebeamerfont{section title}\LARGE\insertsection\par
+	\end{beamercolorbox}
+	\end{centering}
 	\end{frame}
+
 	\subsection{Answer Set Programming}
-		\begin{frame}{Answer Set Programming}
+		\begin{frame}{Answer Set Programming (ASP)}
+		ASP is a declarative programming approach where \emph{constraints} define bounds on the answer set, and a \emph{solver} is used to generate valid instances of the set. To use ASP for procedural destruction, certain constraints must be defined:
+		\vskip .5em
+		\begin{itemize}
+			\item The possible types of damage inflicted
+			\item The structure and materials of each ship
+			\item The response of each structure/material to damage
+			\item The actual damage sustained (during runtime)
+		\end{itemize}
+		\vskip .5em
+		In addition, for each possible damage effect generated, a rendering solution must be provided:
+		\vskip .5em
+		\begin{itemize}
+			\item Decals or mesh deformation for light damage
+			\item Precomputed mesh subdivision for heavy damage
+		\end{itemize}
 		\end{frame}
 	\subsection{Integrated Tools}
 		\begin{frame}{Integrated Tools}
@@ -191,6 +259,8 @@
 		\end{frame}
 
 \section{Conclusion}
+	\begin{frame}
+	\end{frame}
 
 % \section{}
 % \begin{frame}{Glossary}
